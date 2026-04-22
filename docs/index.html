@@ -32,11 +32,9 @@
         padding: 0;
         box-sizing: border-box;
       }
-
       html {
         scroll-behavior: smooth;
       }
-
       body {
         font-family: "Sarabun", sans-serif;
         background: var(--cream);
@@ -44,7 +42,81 @@
         overflow-x: hidden;
       }
 
-      /* ===== LANGUAGE SWITCHER ===== */
+      /* ===== LIGHTBOX ===== */
+      .lightbox-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.92);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 20px;
+      }
+      .lightbox-overlay.active {
+        display: flex;
+      }
+      .lightbox-img {
+        max-width: 92vw;
+        max-height: 82vh;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 8px 60px rgba(0, 0, 0, 0.6);
+        user-select: none;
+      }
+      .lightbox-caption {
+        color: rgba(255, 255, 255, 0.75);
+        font-size: 14px;
+        margin-top: 14px;
+        font-family: "Sarabun", sans-serif;
+      }
+      .lightbox-close {
+        position: fixed;
+        top: 18px;
+        right: 22px;
+        color: #fff;
+        font-size: 34px;
+        cursor: pointer;
+        line-height: 1;
+        background: none;
+        border: none;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+        z-index: 10000;
+      }
+      .lightbox-close:hover {
+        opacity: 1;
+      }
+      .lightbox-nav {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.15);
+        border: none;
+        color: #fff;
+        font-size: 28px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+        z-index: 10000;
+      }
+      .lightbox-nav:hover {
+        background: rgba(255, 255, 255, 0.28);
+      }
+      .lightbox-prev {
+        left: 16px;
+      }
+      .lightbox-next {
+        right: 16px;
+      }
+
+      /* ===== LANG BAR ===== */
       .lang-bar {
         position: fixed;
         top: 0;
@@ -298,7 +370,7 @@
       .hero-photos {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-template-rows: 220px 180px;
+        grid-template-rows: 260px 180px;
         gap: 10px;
         border-radius: 20px;
         overflow: hidden;
@@ -306,47 +378,47 @@
       .photo-main {
         grid-column: 1 / 3;
         grid-row: 1;
-        background: linear-gradient(135deg, #d4b896 0%, #c4a07a 100%);
         border-radius: 14px;
         overflow: hidden;
         position: relative;
         cursor: pointer;
       }
       .photo-sm {
-        background: linear-gradient(135deg, #b8c4a0 0%, #96ab80 100%);
         border-radius: 14px;
         overflow: hidden;
         position: relative;
         cursor: pointer;
       }
-      .photo-sm:last-child {
-        background: linear-gradient(135deg, #c4a8b8 0%, #a88aa0 100%);
-      }
-      .photo-placeholder {
+      .photo-main img,
+      .photo-sm img {
         width: 100%;
         height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        color: rgba(255, 255, 255, 0.8);
+        object-fit: cover;
+        transition: transform 0.4s ease;
+        display: block;
       }
-      .photo-placeholder .icon {
-        font-size: 36px;
-      }
-      .photo-placeholder .lbl {
-        font-size: 13px;
-        font-weight: 600;
+      .photo-main:hover img,
+      .photo-sm:hover img {
+        transform: scale(1.04);
       }
       .photo-overlay {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           to top,
-          rgba(0, 0, 0, 0.3) 0%,
-          transparent 60%
+          rgba(0, 0, 0, 0.28) 0%,
+          transparent 55%
         );
+        pointer-events: none;
+      }
+      .photo-label {
+        position: absolute;
+        bottom: 12px;
+        left: 14px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
       }
 
       /* ===== SECTION COMMON ===== */
@@ -401,7 +473,7 @@
       .gallery-grid {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr;
-        grid-template-rows: 280px 200px;
+        grid-template-rows: 300px 220px;
         gap: 12px;
       }
       .gallery-item {
@@ -409,8 +481,8 @@
         overflow: hidden;
         position: relative;
         cursor: pointer;
-        background: linear-gradient(135deg, #d4b896, #c09060);
         transition: transform 0.3s;
+        background: #d4b896;
       }
       .gallery-item:hover {
         transform: scale(1.02);
@@ -418,17 +490,15 @@
       .gallery-item.tall {
         grid-row: 1 / 3;
       }
-      .gallery-item:nth-child(2) {
-        background: linear-gradient(135deg, #a8c4ab, #7a9e7e);
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.4s ease;
       }
-      .gallery-item:nth-child(3) {
-        background: linear-gradient(135deg, #c4b0a8, #a89090);
-      }
-      .gallery-item:nth-child(4) {
-        background: linear-gradient(135deg, #b8c8d8, #8aabb8);
-      }
-      .gallery-item:nth-child(5) {
-        background: linear-gradient(135deg, #d8c4a8, #c0a880);
+      .gallery-item:hover img {
+        transform: scale(1.06);
       }
       .gallery-label {
         position: absolute;
@@ -442,18 +512,20 @@
         font-weight: 600;
         backdrop-filter: blur(4px);
       }
-      .gallery-upload-hint {
-        text-align: center;
-        margin-top: 20px;
-        padding: 16px;
-        background: rgba(196, 113, 74, 0.08);
-        border: 1px dashed var(--terracotta-light);
-        border-radius: 12px;
-        color: var(--text-light);
-        font-size: 14px;
+      /* zoom icon on hover */
+      .gallery-item::after {
+        content: "🔍";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        font-size: 30px;
+        transition: transform 0.25s;
+        pointer-events: none;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5));
       }
-      .gallery-upload-hint strong {
-        color: var(--terracotta);
+      .gallery-item:hover::after {
+        transform: translate(-50%, -50%) scale(1);
       }
 
       /* ===== DETAILS ===== */
@@ -505,29 +577,43 @@
       }
       .amenities-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 16px;
         margin-top: 40px;
       }
       .amenity-item {
         display: flex;
-        align-items: center;
-        gap: 12px;
+        flex-direction: column;
+        gap: 0;
         background: var(--cream);
         border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 14px 18px;
+        border-radius: 14px;
+        overflow: hidden;
         transition: all 0.2s;
+        cursor: pointer;
       }
       .amenity-item:hover {
         border-color: var(--sage);
-        background: rgba(122, 158, 126, 0.06);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px var(--shadow);
+      }
+      .amenity-photo {
+        width: 100%;
+        height: 140px;
+        object-fit: cover;
+        display: block;
+      }
+      .amenity-footer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
       }
       .amenity-icon {
-        font-size: 20px;
+        font-size: 18px;
       }
       .amenity-name {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         color: var(--text-mid);
       }
@@ -595,7 +681,6 @@
         border-radius: 20px;
         overflow: hidden;
         box-shadow: 0 4px 30px var(--shadow);
-        position: relative;
         border: 2px solid var(--border);
       }
       .map-container iframe {
@@ -603,27 +688,6 @@
         height: 400px;
         border: none;
         display: block;
-      }
-      .map-placeholder {
-        width: 100%;
-        height: 400px;
-        background: linear-gradient(135deg, #d4c8b8, #c0b09a);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-      }
-      .map-placeholder .map-icon {
-        font-size: 60px;
-      }
-      .map-placeholder p {
-        font-size: 16px;
-        color: var(--text-mid);
-      }
-      .map-placeholder small {
-        font-size: 13px;
-        color: var(--text-light);
       }
 
       /* ===== CONTRACT ===== */
@@ -734,8 +798,6 @@
       .contact-method-icon {
         font-size: 24px;
       }
-      .contact-method-info {
-      }
       .contact-method-label {
         font-size: 12px;
         color: rgba(255, 255, 255, 0.5);
@@ -815,7 +877,7 @@
         font-size: 13px;
       }
 
-      /* ===== FLOATING WHATSAPP / LINE ===== */
+      /* ===== FLOATING ===== */
       .float-contact {
         position: fixed;
         bottom: 30px;
@@ -849,7 +911,7 @@
         background: var(--terracotta);
       }
 
-      /* ===== LANG VISIBILITY ===== */
+      /* ===== LANG ===== */
       [data-lang="en"] {
         display: none;
       }
@@ -868,7 +930,7 @@
         }
         .hero-photos {
           grid-template-columns: 1fr;
-          grid-template-rows: 220px 150px 150px;
+          grid-template-rows: 240px 160px 160px;
         }
         .photo-main {
           grid-column: 1;
@@ -889,6 +951,9 @@
         .gallery-item.tall {
           grid-row: auto;
         }
+        .gallery-item {
+          height: 180px;
+        }
         .contract-grid {
           grid-template-columns: 1fr;
         }
@@ -901,7 +966,6 @@
         }
       }
 
-      /* Scroll reveal */
       .reveal {
         opacity: 0;
         transform: translateY(30px);
@@ -914,6 +978,23 @@
     </style>
   </head>
   <body>
+    <!-- ===== LIGHTBOX ===== -->
+    <div
+      class="lightbox-overlay"
+      id="lightbox"
+      onclick="closeLightboxOutside(event)"
+    >
+      <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">
+        ‹
+      </button>
+      <img class="lightbox-img" id="lightbox-img" src="" alt="" />
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+      <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">
+        ›
+      </button>
+    </div>
+
     <!-- LANG BAR -->
     <div class="lang-bar">
       <button class="lang-btn active" onclick="setLang('th')">ภาษาไทย</button>
@@ -1009,34 +1090,58 @@
           </div>
         </div>
         <div class="hero-photos reveal">
-          <div class="photo-main">
-            <div class="photo-placeholder">
-              <span class="icon">🏠</span>
-              <span class="lbl" data-lang="th">
-                <img src="./img/S__28041218.jpg"
-              /></span>
-              <span class="lbl" data-lang="en" style="display: none">
-                <img src="./img/S__28041218.jpg" />
-              </span>
-            </div>
+          <!-- รูปหลัก: หน้าบ้านชั้น1 -->
+          <div
+            class="photo-main"
+            onclick="openLightbox('./img/หน้าบ้านชั้น1.jpg', 'หน้าบ้านชั้น 1')"
+            data-gallery="hero"
+            data-index="0"
+          >
+            <img
+              src="./img/หน้าบ้านชั้น1.jpg"
+              alt="หน้าบ้านชั้น 1"
+              loading="lazy"
+            />
             <div class="photo-overlay"></div>
-          </div>
-          <div class="photo-sm">
-            <div class="photo-placeholder">
-              <span class="icon">🛋️</span>
-              <span class="lbl" data-lang="th">ห้องนั่งเล่น</span>
-              <span class="lbl" data-lang="en" style="display: none"
-                >Living Room</span
-              >
+            <div class="photo-label" data-lang="th">หน้าบ้านชั้น 1</div>
+            <div class="photo-label" data-lang="en" style="display: none">
+              Ground Floor
             </div>
           </div>
-          <div class="photo-sm">
-            <div class="photo-placeholder">
-              <span class="icon">🍳</span>
-              <span class="lbl" data-lang="th">ห้องครัว</span>
-              <span class="lbl" data-lang="en" style="display: none"
-                >Kitchen</span
-              >
+          <!-- รูปเล็ก: ห้องนั่งเล่น -->
+          <div
+            class="photo-sm"
+            onclick="openLightbox('./img/ห้องนั่งเล่น.jpg', 'ห้องนั่งเล่น')"
+            data-gallery="hero"
+            data-index="1"
+          >
+            <img
+              src="./img/ห้องนั่งเล่น.jpg"
+              alt="ห้องนั่งเล่น"
+              loading="lazy"
+            />
+            <div class="photo-overlay"></div>
+            <div class="photo-label" data-lang="th">ห้องนั่งเล่น</div>
+            <div class="photo-label" data-lang="en" style="display: none">
+              Living Room
+            </div>
+          </div>
+          <!-- รูปเล็ก: ห้องครัว -->
+          <div
+            class="photo-sm"
+            onclick="openLightbox('./img/โชนครัวหลังบ้าน.jpg', 'ห้องครัว')"
+            data-gallery="hero"
+            data-index="2"
+          >
+            <img
+              src="./img/โชนครัวหลังบ้าน.jpg"
+              alt="ห้องครัว"
+              loading="lazy"
+            />
+            <div class="photo-overlay"></div>
+            <div class="photo-label" data-lang="th">ห้องครัว</div>
+            <div class="photo-label" data-lang="en" style="display: none">
+              Kitchen
             </div>
           </div>
         </div>
@@ -1058,51 +1163,192 @@
           <div class="divider"></div>
         </div>
         <div class="gallery-grid reveal">
-          <div class="gallery-item tall">
-            <div class="photo-placeholder">
-              <span class="icon" style="font-size: 50px">🏠</span>
-            </div>
-            <span class="gallery-label" data-lang="th">
-              <img src="./img/S__28041218.jpg" />
-            </span>
+          <!-- tall: หน้าบ้านชั้น2 -->
+          <div
+            class="gallery-item tall"
+            onclick="openLightbox('./img/หน้าบ้านชั้น2.jpg', 'หน้าบ้านชั้น 2')"
+            data-gallery="main"
+            data-index="0"
+          >
+            <img
+              src="./img/หน้าบ้านชั้น2.jpg"
+              alt="หน้าบ้านชั้น 2"
+              loading="lazy"
+            />
+            <span class="gallery-label" data-lang="th">หน้าบ้านชั้น 2</span>
             <span class="gallery-label" data-lang="en" style="display: none"
-              >Exterior</span
+              >2nd Floor Exterior</span
             >
           </div>
-          <div class="gallery-item">
-            <div class="photo-placeholder">
-              <span class="icon" style="font-size: 40px">🛋️</span>
-            </div>
+          <!-- ห้องนั่งเล่น 2 -->
+          <div
+            class="gallery-item"
+            onclick="openLightbox('./img/ห้องนั่งเล่น2.jpg', 'ห้องนั่งเล่น')"
+            data-gallery="main"
+            data-index="1"
+          >
+            <img
+              src="./img/ห้องนั่งเล่น2.jpg"
+              alt="ห้องนั่งเล่น"
+              loading="lazy"
+            />
             <span class="gallery-label" data-lang="th">ห้องนั่งเล่น</span>
             <span class="gallery-label" data-lang="en" style="display: none"
               >Living Room</span
             >
           </div>
-          <div class="gallery-item">
-            <div class="photo-placeholder">
-              <span class="icon" style="font-size: 40px">🍳</span>
-            </div>
-            <span class="gallery-label" data-lang="th">ห้องครัว</span>
+          <!-- ห้องครัว -->
+          <div
+            class="gallery-item"
+            onclick="
+              openLightbox('./img/โชนครัวหลังบ้าน.jpg', 'โซนครัวหลังบ้าน')
+            "
+            data-gallery="main"
+            data-index="2"
+          >
+            <img src="./img/โชนครัวหลังบ้าน.jpg" alt="โซนครัว" loading="lazy" />
+            <span class="gallery-label" data-lang="th">โซนครัวหลังบ้าน</span>
             <span class="gallery-label" data-lang="en" style="display: none"
-              >Kitchen</span
+              >Kitchen Zone</span
             >
           </div>
-          <div class="gallery-item">
-            <div class="photo-placeholder">
-              <span class="icon" style="font-size: 40px">🛏️</span>
-            </div>
-            <span class="gallery-label" data-lang="th">ห้องนอน</span>
+          <!-- ห้องนอนใหญ่ -->
+          <div
+            class="gallery-item"
+            onclick="openLightbox('./img/ห้องนอนใหญ่.jpg', 'ห้องนอนใหญ่')"
+            data-gallery="main"
+            data-index="3"
+          >
+            <img src="./img/ห้องนอนใหญ่.jpg" alt="ห้องนอนใหญ่" loading="lazy" />
+            <span class="gallery-label" data-lang="th">ห้องนอนใหญ่</span>
             <span class="gallery-label" data-lang="en" style="display: none"
-              >Bedroom</span
+              >Master Bedroom</span
             >
           </div>
-          <div class="gallery-item">
-            <div class="photo-placeholder">
-              <span class="icon" style="font-size: 40px">🚿</span>
-            </div>
+          <!-- ห้องน้ำ -->
+          <div
+            class="gallery-item"
+            onclick="openLightbox('./img/ห้องน้ำ2.jpg', 'ห้องน้ำ')"
+            data-gallery="main"
+            data-index="4"
+          >
+            <img src="./img/ห้องน้ำ2.jpg" alt="ห้องน้ำ" loading="lazy" />
             <span class="gallery-label" data-lang="th">ห้องน้ำ</span>
             <span class="gallery-label" data-lang="en" style="display: none"
               >Bathroom</span
+            >
+          </div>
+        </div>
+
+        <!-- แถวรูปเพิ่มเติม -->
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+          "
+          class="reveal"
+        >
+          <div
+            class="gallery-item"
+            style="height: 160px"
+            onclick="openLightbox('./img/ห้องนอนเล็ก.jpg', 'ห้องนอนเล็ก')"
+            data-gallery="main"
+            data-index="5"
+          >
+            <img src="./img/ห้องนอนเล็ก.jpg" alt="ห้องนอนเล็ก" loading="lazy" />
+            <span class="gallery-label" data-lang="th">ห้องนอนเล็ก</span>
+            <span class="gallery-label" data-lang="en" style="display: none"
+              >Small Bedroom</span
+            >
+          </div>
+          <div
+            class="gallery-item"
+            style="height: 160px"
+            onclick="
+              openLightbox('./img/หน้าห้องนอนใหญ่.jpg', 'ทางเข้าห้องนอนใหญ่')
+            "
+            data-gallery="main"
+            data-index="6"
+          >
+            <img
+              src="./img/หน้าห้องนอนใหญ่.jpg"
+              alt="ทางเข้าห้องนอนใหญ่"
+              loading="lazy"
+            />
+            <span class="gallery-label" data-lang="th">หน้าห้องนอนใหญ่</span>
+            <span class="gallery-label" data-lang="en" style="display: none"
+              >Master Bedroom Door</span
+            >
+          </div>
+          <div
+            class="gallery-item"
+            style="height: 160px"
+            onclick="
+              openLightbox('./img/หน้าห้องนอนเล็ก.jpg', 'ทางเข้าห้องนอนเล็ก')
+            "
+            data-gallery="main"
+            data-index="7"
+          >
+            <img
+              src="./img/หน้าห้องนอนเล็ก.jpg"
+              alt="ทางเข้าห้องนอนเล็ก"
+              loading="lazy"
+            />
+            <span class="gallery-label" data-lang="th">หน้าห้องนอนเล็ก</span>
+            <span class="gallery-label" data-lang="en" style="display: none"
+              >Small Bedroom Door</span
+            >
+          </div>
+          <div
+            class="gallery-item"
+            style="height: 160px"
+            onclick="openLightbox('./img/ทางขึ้นชั้น2.jpg', 'บันไดขึ้นชั้น 2')"
+            data-gallery="main"
+            data-index="8"
+          >
+            <img src="./img/ทางขึ้นชั้น2.jpg" alt="บันได" loading="lazy" />
+            <span class="gallery-label" data-lang="th">บันไดขึ้นชั้น 2</span>
+            <span class="gallery-label" data-lang="en" style="display: none"
+              >Stairs to 2nd Floor</span
+            >
+          </div>
+          <div
+            class="gallery-item"
+            style="height: 160px"
+            onclick="openLightbox('./img/ห้องเก็บของ.jpg', 'ห้องเก็บของ')"
+            data-gallery="main"
+            data-index="9"
+          >
+            <img src="./img/ห้องเก็บของ.jpg" alt="ห้องเก็บของ" loading="lazy" />
+            <span class="gallery-label" data-lang="th">ห้องเก็บของ</span>
+            <span class="gallery-label" data-lang="en" style="display: none"
+              >Storage Room</span
+            >
+          </div>
+          <div
+            class="gallery-item"
+            style="height: 160px"
+            onclick="
+              openLightbox(
+                './img/ห้องน้ำหรือนั่งเล่น.jpg',
+                'ห้องน้ำ / มุมนั่งเล่น',
+              )
+            "
+            data-gallery="main"
+            data-index="10"
+          >
+            <img
+              src="./img/ห้องน้ำหรือนั่งเล่น.jpg"
+              alt="ห้องน้ำ/นั่งเล่น"
+              loading="lazy"
+            />
+            <span class="gallery-label" data-lang="th"
+              >ห้องน้ำ / มุมนั่งเล่น</span
+            >
+            <span class="gallery-label" data-lang="en" style="display: none"
+              >Bathroom / Lounge</span
             >
           </div>
         </div>
@@ -1197,49 +1443,125 @@
           <div class="divider"></div>
         </div>
         <div class="amenities-grid reveal">
-          <div class="amenity-item">
-            <span class="amenity-icon">❄️</span
-            ><span class="amenity-name" data-lang="th"
-              >แอร์ห้องนอนใหญ่ 1 ห้อง</span
-            ><span class="amenity-name" data-lang="en" style="display: none"
-              >A/C in Master Bedroom</span
-            >
+          <div
+            class="amenity-item"
+            onclick="
+              openLightbox('./img/ห้องนอนใหญ่.jpg', 'ห้องนอนใหญ่ พร้อมแอร์')
+            "
+          >
+            <img
+              class="amenity-photo"
+              src="./img/ห้องนอนใหญ่.jpg"
+              alt="แอร์ห้องนอนใหญ่"
+              loading="lazy"
+            />
+            <div class="amenity-footer">
+              <span class="amenity-icon">❄️</span
+              ><span class="amenity-name" data-lang="th"
+                >แอร์ห้องนอนใหญ่ 1 ห้อง</span
+              ><span class="amenity-name" data-lang="en" style="display: none"
+                >A/C in Master Bedroom</span
+              >
+            </div>
           </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">🚿</span
-            ><span class="amenity-name" data-lang="th"
-              >เครื่องทำน้ำอุ่น 1 ห้องน้ำ</span
-            ><span class="amenity-name" data-lang="en" style="display: none"
-              >Water Heater (1 bathroom)</span
-            >
+          <div
+            class="amenity-item"
+            onclick="
+              openLightbox(
+                './img/ห้องน้ำ2.jpg',
+                'ห้องน้ำ พร้อมเครื่องทำน้ำอุ่น',
+              )
+            "
+          >
+            <img
+              class="amenity-photo"
+              src="./img/ห้องน้ำ2.jpg"
+              alt="เครื่องทำน้ำอุ่น"
+              loading="lazy"
+            />
+            <div class="amenity-footer">
+              <span class="amenity-icon">🚿</span
+              ><span class="amenity-name" data-lang="th"
+                >เครื่องทำน้ำอุ่น 1 ห้องน้ำ</span
+              ><span class="amenity-name" data-lang="en" style="display: none"
+                >Water Heater (1 bathroom)</span
+              >
+            </div>
           </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">🪟</span
-            ><span class="amenity-name" data-lang="th">ผ้าม่านบังแดดทุกบาน</span
-            ><span class="amenity-name" data-lang="en" style="display: none"
-              >Curtains on All Windows</span
-            >
+          <div
+            class="amenity-item"
+            onclick="openLightbox('./img/ห้องนั่งเล่น.jpg', 'ห้องนั่งเล่น')"
+          >
+            <img
+              class="amenity-photo"
+              src="./img/ห้องนั่งเล่น.jpg"
+              alt="ห้องนั่งเล่น"
+              loading="lazy"
+            />
+            <div class="amenity-footer">
+              <span class="amenity-icon">🛋️</span
+              ><span class="amenity-name" data-lang="th">ห้องนั่งเล่นกว้าง</span
+              ><span class="amenity-name" data-lang="en" style="display: none"
+                >Spacious Living Room</span
+              >
+            </div>
           </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">🚗</span
-            ><span class="amenity-name" data-lang="th">ที่จอดรถหน้าบ้าน</span
-            ><span class="amenity-name" data-lang="en" style="display: none"
-              >Front Parking Space</span
-            >
+          <div
+            class="amenity-item"
+            onclick="
+              openLightbox('./img/หน้าบ้านชั้น1.jpg', 'ที่จอดรถหน้าบ้าน')
+            "
+          >
+            <img
+              class="amenity-photo"
+              src="./img/หน้าบ้านชั้น1.jpg"
+              alt="ที่จอดรถ"
+              loading="lazy"
+            />
+            <div class="amenity-footer">
+              <span class="amenity-icon">🚗</span
+              ><span class="amenity-name" data-lang="th">ที่จอดรถหน้าบ้าน</span
+              ><span class="amenity-name" data-lang="en" style="display: none"
+                >Front Parking Space</span
+              >
+            </div>
           </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">📦</span
-            ><span class="amenity-name" data-lang="th">ห้องเก็บของ</span
-            ><span class="amenity-name" data-lang="en" style="display: none"
-              >Storage Room</span
-            >
+          <div
+            class="amenity-item"
+            onclick="openLightbox('./img/ห้องเก็บของ.jpg', 'ห้องเก็บของ')"
+          >
+            <img
+              class="amenity-photo"
+              src="./img/ห้องเก็บของ.jpg"
+              alt="ห้องเก็บของ"
+              loading="lazy"
+            />
+            <div class="amenity-footer">
+              <span class="amenity-icon">📦</span
+              ><span class="amenity-name" data-lang="th">ห้องเก็บของ</span
+              ><span class="amenity-name" data-lang="en" style="display: none"
+                >Storage Room</span
+              >
+            </div>
           </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">🛋️</span
-            ><span class="amenity-name" data-lang="th">ห้องนั่งเล่นกว้าง</span
-            ><span class="amenity-name" data-lang="en" style="display: none"
-              >Spacious Living Room</span
-            >
+          <div
+            class="amenity-item"
+            onclick="openLightbox('./img/ทางขึ้นชั้น22.jpg', 'บันได')"
+          >
+            <img
+              class="amenity-photo"
+              src="./img/ทางขึ้นชั้น22.jpg"
+              alt="บันได"
+              loading="lazy"
+            />
+            <div class="amenity-footer">
+              <span class="amenity-icon">🪟</span
+              ><span class="amenity-name" data-lang="th"
+                >ผ้าม่านบังแดดทุกบาน</span
+              ><span class="amenity-name" data-lang="en" style="display: none"
+                >Curtains on All Windows</span
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -1259,7 +1581,6 @@
           </h2>
           <div class="divider"></div>
         </div>
-
         <div class="nearby-list reveal">
           <div class="nearby-item">
             <span class="nearby-icon">🏫</span>
@@ -1284,7 +1605,7 @@
                 ห้างสรรพสินค้า โลตัส บางปะกง
               </div>
               <div class="nearby-name" data-lang="en" style="display: none">
-                Shopping Mall
+                Lotus Bangpakong
               </div>
               <div class="nearby-desc" data-lang="th">
                 ซูเปอร์มาร์เก็ต ร้านอาหาร
@@ -1298,11 +1619,9 @@
           <div class="nearby-item">
             <span class="nearby-icon">🏪</span>
             <div class="nearby-info">
-              <div class="nearby-name" data-lang="th">
-                ห้างสรรพสินค้า Mega Bangna
-              </div>
+              <div class="nearby-name" data-lang="th">Mega Bangna</div>
               <div class="nearby-name" data-lang="en" style="display: none">
-                Mega Bangna Shopping Mall
+                Mega Bangna
               </div>
               <div class="nearby-desc" data-lang="th">
                 ซูเปอร์มาร์เก็ต ร้านอาหาร และโรงภาพยนตร์
@@ -1316,11 +1635,9 @@
           <div class="nearby-item">
             <span class="nearby-icon">🏪</span>
             <div class="nearby-info">
-              <div class="nearby-name" data-lang="th">
-                ห้างสรรพสินค้า เซ็นทรัล ชลบุรี
-              </div>
+              <div class="nearby-name" data-lang="th">เซ็นทรัล ชลบุรี</div>
               <div class="nearby-name" data-lang="en" style="display: none">
-                Central Chonburi Shopping Mall
+                Central Chonburi
               </div>
               <div class="nearby-desc" data-lang="th">
                 ซูเปอร์มาร์เก็ต ร้านอาหาร และโรงภาพยนตร์
@@ -1334,11 +1651,9 @@
           <div class="nearby-item">
             <span class="nearby-icon">🏪</span>
             <div class="nearby-info">
-              <div class="nearby-name" data-lang="th">
-                ห้างสรรพสินค้า โรบินสัน ฉะเชิงเทรา
-              </div>
+              <div class="nearby-name" data-lang="th">โรบินสัน ฉะเชิงเทรา</div>
               <div class="nearby-name" data-lang="en" style="display: none">
-                Robinson Chachoengsao Shopping Mall
+                Robinson Chachoengsao
               </div>
               <div class="nearby-desc" data-lang="th">
                 ซูเปอร์มาร์เก็ต ร้านอาหาร และโรงภาพยนตร์
@@ -1354,11 +1669,11 @@
             <div class="nearby-info">
               <div class="nearby-name" data-lang="th">โรงพยาบาลบางปะกง</div>
               <div class="nearby-name" data-lang="en" style="display: none">
-                Hospital
+                Bangpakong Hospital
               </div>
               <div class="nearby-desc" data-lang="th">โรงพยาบาลรัฐบาล</div>
               <div class="nearby-desc" data-lang="en" style="display: none">
-                government hospital
+                Government hospital
               </div>
             </div>
             <span class="nearby-dist">~7.5 กม.</span>
@@ -1370,11 +1685,11 @@
                 โรงพยาบาลจุฬารัตน์ 11 อินเตอร์
               </div>
               <div class="nearby-name" data-lang="en" style="display: none">
-                Hospital
+                Chularat 11 International
               </div>
               <div class="nearby-desc" data-lang="th">โรงพยาบาลเอกชน</div>
               <div class="nearby-desc" data-lang="en" style="display: none">
-                private hospital
+                Private hospital
               </div>
             </div>
             <span class="nearby-dist">~6 กม.</span>
@@ -1392,7 +1707,7 @@
                 เดินถึงได้ภายใน 13 นาที
               </div>
               <div class="nearby-desc" data-lang="en" style="display: none">
-                13-minute walk from the house
+                13-minute walk
               </div>
             </div>
             <span class="nearby-dist">~1.3 กม.</span>
@@ -1414,14 +1729,7 @@
             <span class="nearby-dist">~600 ม.</span>
           </div>
         </div>
-
         <div class="map-container reveal">
-          <!-- 
-        วิธีใส่ Google Maps จริง:
-        1. ไปที่ maps.google.com แล้วหาที่อยู่บ้านของคุณ
-        2. กด Share > Embed a map > คัดลอก iframe
-        3. วาง iframe ข้างล่างนี้แทนที่ map-placeholder ด้วย
-      -->
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3879.2782103157706!2d100.96052817572894!3d13.518510602650824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311d4744251ecfb7%3A0xa02f345add9af795!2z4LmC4LiE4Lij4LiH4LiB4Liy4Lij4Lio4Lij4Li14LmA4LiX4Lie4Lin4Li04Lil4LmA4Lil4LiIIOC4meC4teC5guC4rSDguJrguLLguIfguJvguLDguIHguIc!5e0!3m2!1sth!2sth!4v1776394928283!5m2!1sth!2sth"
             width="600"
@@ -1455,7 +1763,6 @@
         </p>
       </div>
 
-      <!-- PRICING CARDS -->
       <div
         style="
           display: grid;
@@ -1506,7 +1813,7 @@
               "
             >
               <span data-lang="th">สัญญา 1 ปีขึ้นไป</span
-              ><span data-lang="en" style="display: none">3+ Year Lease</span>
+              ><span data-lang="en" style="display: none">1+ Year Lease</span>
             </div>
             <div
               style="
@@ -1538,15 +1845,13 @@
               <span class="c-key" data-lang="th">มัดจำ (2 เดือน)</span
               ><span class="c-key" data-lang="en" style="display: none"
                 >Deposit (2 months)</span
-              >
-              <span class="c-val highlight">฿18,0000</span>
+              ><span class="c-val highlight">฿18,000</span>
             </div>
             <div class="contract-row">
               <span class="c-key" data-lang="th">ระยะสัญญา</span
               ><span class="c-key" data-lang="en" style="display: none"
                 >Duration</span
-              >
-              <span class="c-val" data-lang="th">1 ปีขึ้นไป</span
+              ><span class="c-val" data-lang="th">1 ปีขึ้นไป</span
               ><span class="c-val" data-lang="en" style="display: none"
                 >1+ years</span
               >
@@ -1554,25 +1859,22 @@
             <div class="contract-row">
               <span class="c-key" data-lang="th">ประหยัดต่อปี</span
               ><span class="c-key" data-lang="en" style="display: none"
-                >Savings/year</span
-              >
-              <span
+                >Annual Savings</span
+              ><span
                 class="c-val"
                 style="color: var(--sage); font-weight: 700"
                 data-lang="th"
-                >vs. 6 เดือน ฿6,000</span
-              >
-              <span
+                >vs. 6 เดือน ฿12,000</span
+              ><span
                 class="c-val"
                 style="color: var(--sage); font-weight: 700"
                 data-lang="en"
                 style="display: none"
-                >vs. 6 months ฿6,000</span
+                >vs. 6 months ฿12,000</span
               >
             </div>
           </div>
         </div>
-
         <!-- 6 mon -->
         <div
           style="
@@ -1596,7 +1898,7 @@
             >
               <span data-lang="th">สัญญา 6 เดือนขึ้นไป ไม่เกิน 1 ปี</span
               ><span data-lang="en" style="display: none"
-                >6 months, but not exceeding 1 year.</span
+                >6 months – under 1 year</span
               >
             </div>
             <div
@@ -1629,15 +1931,13 @@
               <span class="c-key" data-lang="th">มัดจำ (2 เดือน)</span
               ><span class="c-key" data-lang="en" style="display: none"
                 >Deposit (2 months)</span
-              >
-              <span class="c-val highlight">฿20,000</span>
+              ><span class="c-val highlight">฿20,000</span>
             </div>
             <div class="contract-row">
               <span class="c-key" data-lang="th">ระยะสัญญา</span
               ><span class="c-key" data-lang="en" style="display: none"
                 >Duration</span
-              >
-              <span class="c-val" data-lang="th">6 เดือน</span
+              ><span class="c-val" data-lang="th">6 เดือน</span
               ><span class="c-val" data-lang="en" style="display: none"
                 >6 months</span
               >
@@ -1646,8 +1946,7 @@
               <span class="c-key" data-lang="th">หมายเหตุ</span
               ><span class="c-key" data-lang="en" style="display: none"
                 >Note</span
-              >
-              <span class="c-val" data-lang="th">ราคาปกติ</span
+              ><span class="c-val" data-lang="th">ราคาปกติ</span
               ><span class="c-val" data-lang="en" style="display: none"
                 >Standard rate</span
               >
@@ -1678,22 +1977,21 @@
             border-bottom: 1px solid var(--border);
           "
         >
-          <span data-lang="th">📋 เงื่อนไขทั่วไป</span>
-          <span data-lang="en" style="display: none">📋 General Terms</span>
+          <span data-lang="th">📋 เงื่อนไขทั่วไป</span
+          ><span data-lang="en" style="display: none">📋 General Terms</span>
         </h3>
         <div
           style="
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 2;
+            gap: 2px;
           "
         >
           <div class="contract-row">
             <span class="c-key" data-lang="th">วันชำระค่าเช่า</span
             ><span class="c-key" data-lang="en" style="display: none"
               >Payment Due</span
-            >
-            <span class="c-val" data-lang="th">ทุกวันที่ 1 ของเดือน</span
+            ><span class="c-val" data-lang="th">ทุกวันที่ 1 ของเดือน</span
             ><span class="c-val" data-lang="en" style="display: none"
               >1st of each month</span
             >
@@ -1702,8 +2000,7 @@
             <span class="c-key" data-lang="th">ค่าไฟฟ้า / น้ำประปา</span
             ><span class="c-key" data-lang="en" style="display: none"
               >Electric / Water</span
-            >
-            <span class="c-val" data-lang="th">ตามมิเตอร์จริง</span
+            ><span class="c-val" data-lang="th">ตามมิเตอร์จริง</span
             ><span class="c-val" data-lang="en" style="display: none"
               >Actual meter rate</span
             >
@@ -1712,8 +2009,7 @@
             <span class="c-key" data-lang="th">การบอกเลิกสัญญา</span
             ><span class="c-key" data-lang="en" style="display: none"
               >Termination Notice</span
-            >
-            <span class="c-val" data-lang="th">แจ้งล่วงหน้า 2 เดือน</span
+            ><span class="c-val" data-lang="th">แจ้งล่วงหน้า 2 เดือน</span
             ><span class="c-val" data-lang="en" style="display: none"
               >2 months notice</span
             >
@@ -1722,8 +2018,7 @@
             <span class="c-key" data-lang="th">การต่อเติม</span
             ><span class="c-key" data-lang="en" style="display: none"
               >Modification</span
-            >
-            <span class="c-val" data-lang="th">ต้องได้รับอนุญาต</span
+            ><span class="c-val" data-lang="th">ต้องได้รับอนุญาต</span
             ><span class="c-val" data-lang="en" style="display: none"
               >Owner approval required</span
             >
@@ -1752,10 +2047,9 @@
           </p>
           <p class="section-desc" data-lang="en" style="display: none">
             We're happy to answer questions and arrange viewings any day.
-            Contact us through any of these channels.
           </p>
           <div class="contact-methods">
-            <a href="tel:+66812345678" class="contact-method">
+            <a href="tel:+66981028831" class="contact-method">
               <span class="contact-method-icon">📞</span>
               <div class="contact-method-info">
                 <div class="contact-method-label" data-lang="th">โทรศัพท์</div>
@@ -1782,7 +2076,7 @@
                 <div class="contact-method-val">nurse1428</div>
               </div>
             </a>
-            <a href="mailto:owner@email.com" class="contact-method">
+            <a href="mailto:wongsatornmaaueai@gmail.com" class="contact-method">
               <span class="contact-method-icon">📧</span>
               <div class="contact-method-info">
                 <div class="contact-method-label">Email</div>
@@ -1823,7 +2117,6 @@
       </div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
       <p>
         © 2026 บ้านเช่า | Home Rental &nbsp;·&nbsp;
@@ -1832,7 +2125,6 @@
       </p>
     </footer>
 
-    <!-- FLOATING BUTTONS -->
     <div class="float-contact">
       <a
         href="https://line.me/ti/p/0bMcwJV37M"
@@ -1847,6 +2139,82 @@
     </div>
 
     <script>
+      // ===== LIGHTBOX =====
+      const galleries = {
+        hero: [
+          { src: "./img/หน้าบ้านชั้น1.jpg", cap: "หน้าบ้านชั้น 1" },
+          { src: "./img/ห้องนั่งเล่น.jpg", cap: "ห้องนั่งเล่น" },
+          { src: "./img/โชนครัวหลังบ้าน.jpg", cap: "ห้องครัว" },
+        ],
+        main: [
+          { src: "./img/หน้าบ้านชั้น2.jpg", cap: "หน้าบ้านชั้น 2" },
+          { src: "./img/ห้องนั่งเล่น2.jpg", cap: "ห้องนั่งเล่น" },
+          { src: "./img/โชนครัวหลังบ้าน.jpg", cap: "โซนครัวหลังบ้าน" },
+          { src: "./img/ห้องนอนใหญ่.jpg", cap: "ห้องนอนใหญ่" },
+          { src: "./img/ห้องน้ำ2.jpg", cap: "ห้องน้ำ" },
+          { src: "./img/ห้องนอนเล็ก.jpg", cap: "ห้องนอนเล็ก" },
+          { src: "./img/หน้าห้องนอนใหญ่.jpg", cap: "ทางเข้าห้องนอนใหญ่" },
+          { src: "./img/หน้าห้องนอนเล็ก.jpg", cap: "ทางเข้าห้องนอนเล็ก" },
+          { src: "./img/ทางขึ้นชั้น2.jpg", cap: "บันไดขึ้นชั้น 2" },
+          { src: "./img/ห้องเก็บของ.jpg", cap: "ห้องเก็บของ" },
+          {
+            src: "./img/ห้องน้ำหรือนั่งเล่น.jpg",
+            cap: "ห้องน้ำ / มุมนั่งเล่น",
+          },
+        ],
+      };
+
+      let currentGallery = null;
+      let currentIdx = 0;
+
+      function openLightbox(src, cap, gallery, idx) {
+        const lb = document.getElementById("lightbox");
+        document.getElementById("lightbox-img").src = src;
+        document.getElementById("lightbox-caption").textContent = cap || "";
+        currentGallery = gallery || null;
+        currentIdx = idx || 0;
+        lb.classList.add("active");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        document.getElementById("lightbox").classList.remove("active");
+        document.body.style.overflow = "";
+      }
+
+      function closeLightboxOutside(e) {
+        if (e.target === document.getElementById("lightbox")) closeLightbox();
+      }
+
+      function lightboxNav(dir) {
+        if (!currentGallery || !galleries[currentGallery]) return;
+        const arr = galleries[currentGallery];
+        currentIdx = (currentIdx + dir + arr.length) % arr.length;
+        document.getElementById("lightbox-img").src = arr[currentIdx].src;
+        document.getElementById("lightbox-caption").textContent =
+          arr[currentIdx].cap;
+      }
+
+      // Wire up data-gallery items
+      document.querySelectorAll("[data-gallery]").forEach((el) => {
+        const g = el.getAttribute("data-gallery");
+        const i = parseInt(el.getAttribute("data-index") || "0");
+        el.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const arr = galleries[g];
+          if (arr && arr[i]) openLightbox(arr[i].src, arr[i].cap, g, i);
+        });
+      });
+
+      // Keyboard nav
+      document.addEventListener("keydown", (e) => {
+        if (!document.getElementById("lightbox").classList.contains("active"))
+          return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowRight") lightboxNav(1);
+        if (e.key === "ArrowLeft") lightboxNav(-1);
+      });
+
       // ===== LANGUAGE SWITCHER =====
       let currentLang = "th";
       function setLang(lang) {
@@ -1862,7 +2230,6 @@
           );
         });
         document.documentElement.lang = lang;
-        // update placeholders
         document.querySelectorAll("input, textarea").forEach((el) => {
           if (lang === "en" && el.id === "f-name")
             el.placeholder = "Your name...";
@@ -1874,7 +2241,7 @@
         });
       }
 
-      // ===== SEND MESSAGE via LINE / copy =====
+      // ===== SEND LINE =====
       function sendLineMsg() {
         const name = document.getElementById("f-name").value.trim();
         const phone = document.getElementById("f-phone").value.trim();
@@ -1891,14 +2258,12 @@
           currentLang === "th"
             ? `สวัสดีครับ ผม/หนู ${name}\nเบอร์ติดต่อ: ${phone}\n${msg}`
             : `Hello, I'm ${name}\nPhone: ${phone}\n${msg}`;
-        const encoded = encodeURIComponent(text);
-        // Copy to clipboard + open LINE
         navigator.clipboard.writeText(text).catch(() => {});
-        window.open(`https://line.me/ti/p/0bMcwJV37M`, "_blank");
+        window.open("https://line.me/ti/p/0bMcwJV37M", "_blank");
         alert(
           currentLang === "th"
             ? "✅ คัดลอกข้อความแล้ว กรุณาวางใน LINE ที่เปิดขึ้นมาได้เลยครับ"
-            : "✅ Message copied. Please paste it in the LINE chat that just opened.",
+            : "✅ Message copied. Please paste it in the LINE chat.",
         );
       }
 
@@ -1906,9 +2271,7 @@
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add("visible");
-            }
+            if (e.isIntersecting) e.target.classList.add("visible");
           });
         },
         { threshold: 0.1 },
