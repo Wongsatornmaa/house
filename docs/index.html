@@ -912,8 +912,8 @@
       }
 
       /* ===== LANG ===== */
-      [data-lang="en"] {
-        display: none;
+      .lang-hidden {
+        display: none !important;
       }
 
       /* ===== RESPONSIVE ===== */
@@ -2101,8 +2101,11 @@
       function setLang(lang) {
         currentLang = lang;
         document.querySelectorAll("[data-lang]").forEach((el) => {
-          el.style.display =
-            el.getAttribute("data-lang") === lang ? "" : "none";
+          if (el.getAttribute("data-lang") === lang) {
+            el.classList.remove("lang-hidden");
+          } else {
+            el.classList.add("lang-hidden");
+          }
         });
         document.querySelectorAll(".lang-btn").forEach((btn, i) => {
           btn.classList.toggle(
@@ -2147,6 +2150,11 @@
             : "✅ Message copied. Please paste it in the LINE chat.",
         );
       }
+
+      // Init: hide all [data-lang="en"] elements on load
+      document
+        .querySelectorAll('[data-lang="en"]')
+        .forEach((el) => el.classList.add("lang-hidden"));
 
       // ===== SCROLL REVEAL =====
       const observer = new IntersectionObserver(
