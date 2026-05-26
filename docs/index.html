@@ -978,6 +978,134 @@
     </style>
   </head>
   <body>
+
+    <!-- ===== RENTED OVERLAY ===== -->
+    <div id="rented-overlay" style="
+      position:fixed; inset:0; z-index:99999;
+      background: #faf6f0;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      font-family:'Sarabun',sans-serif;
+      overflow:hidden;
+    ">
+      <!-- decorative blobs -->
+      <div style="position:absolute;top:-120px;right:-120px;width:480px;height:480px;
+        border-radius:50%;background:radial-gradient(circle,rgba(196,113,74,0.1) 0%,transparent 70%);pointer-events:none;"></div>
+      <div style="position:absolute;bottom:-100px;left:-100px;width:420px;height:420px;
+        border-radius:50%;background:radial-gradient(circle,rgba(122,158,126,0.09) 0%,transparent 70%);pointer-events:none;"></div>
+
+      <div style="
+        text-align:center; max-width:520px; padding:40px 32px;
+        position:relative; z-index:1;
+        animation: fadeUp 0.7s cubic-bezier(.22,1,.36,1) both;
+      ">
+        <!-- icon -->
+        <div style="
+          width:100px; height:100px; border-radius:50%;
+          background:linear-gradient(135deg,#c4714a,#e8956d);
+          display:flex; align-items:center; justify-content:center;
+          margin:0 auto 28px;
+          box-shadow:0 12px 40px rgba(196,113,74,0.3);
+          animation: popIn 0.6s 0.2s cubic-bezier(.34,1.56,.64,1) both;
+        ">
+          <span style="font-size:42px;line-height:1;">🏠</span>
+        </div>
+
+        <!-- badge -->
+        <div style="
+          display:inline-flex; align-items:center; gap:8px;
+          background:rgba(196,113,74,0.1); border:1px solid rgba(196,113,74,0.3);
+          color:#c4714a; padding:6px 18px; border-radius:20px;
+          font-size:13px; font-weight:700; letter-spacing:1px;
+          text-transform:uppercase; margin-bottom:22px;
+          animation: fadeUp 0.6s 0.3s both;
+        ">● มีผู้เช่าแล้ว &nbsp;·&nbsp; Rented</div>
+
+        <!-- headline TH -->
+        <h1 style="
+          font-family:'Playfair Display',serif;
+          font-size:clamp(30px,5vw,48px); color:#5c3d2e;
+          line-height:1.25; margin-bottom:10px;
+          animation: fadeUp 0.6s 0.4s both;
+        ">ขออภัย — บ้านหลังนี้<br/><em style="color:#c4714a;font-style:italic;">มีผู้เช่าแล้ว</em></h1>
+
+        <!-- headline EN -->
+        <h2 style="
+          font-family:'Playfair Display',serif;
+          font-size:clamp(16px,2.5vw,22px); color:#8b6355;
+          font-weight:400; font-style:italic;
+          margin-bottom:28px;
+          animation: fadeUp 0.6s 0.45s both;
+        ">This property is currently occupied.</h2>
+
+        <!-- divider -->
+        <div style="
+          width:50px; height:3px; border-radius:2px; margin:0 auto 28px;
+          background:linear-gradient(to right,#c4714a,#e8956d);
+          animation: fadeUp 0.6s 0.5s both;
+        "></div>
+
+        <!-- description -->
+        <p style="
+          font-size:16px; color:#5a3e35; line-height:1.8;
+          margin-bottom:10px;
+          animation: fadeUp 0.6s 0.55s both;
+        ">หากสนใจหรืออยากแจ้งชื่อรอ สามารถติดต่อเจ้าของได้เลยครับ</p>
+        <p style="
+          font-size:14px; color:#9a7b70; line-height:1.8; margin-bottom:36px;
+          animation: fadeUp 0.6s 0.58s both;
+        ">Feel free to contact the owner to join the waiting list.</p>
+
+        <!-- buttons -->
+        <div style="
+          display:flex; gap:14px; justify-content:center; flex-wrap:wrap;
+          animation: fadeUp 0.6s 0.65s both;
+        ">
+          <a href="https://line.me/ti/p/0bMcwJV37M" target="_blank" style="
+            background:#c4714a; color:#fff; padding:13px 28px;
+            border-radius:30px; font-size:15px; font-weight:700;
+            text-decoration:none; font-family:'Sarabun',sans-serif;
+            box-shadow:0 4px 20px rgba(196,113,74,0.35);
+            transition:all 0.2s; display:inline-flex; align-items:center; gap:8px;
+          " onmouseover="this.style.background='#a05a38';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.background='#c4714a';this.style.transform='translateY(0)'">
+            💬 แจ้งชื่อรอ / Contact
+          </a>
+          <a href="tel:+66981028831" style="
+            background:transparent; color:#5c3d2e; padding:13px 24px;
+            border-radius:30px; font-size:15px; font-weight:600;
+            text-decoration:none; font-family:'Sarabun',sans-serif;
+            border:2px solid #e8d5c4; display:inline-flex; align-items:center; gap:8px;
+            transition:all 0.2s;
+          " onmouseover="this.style.borderColor='#5c3d2e'"
+             onmouseout="this.style.borderColor='#e8d5c4'">
+            📞 098-102-8831
+          </a>
+        </div>
+
+        <!-- see original page link -->
+        <p style="
+          margin-top:40px; font-size:13px; color:#b89a8a;
+          animation: fadeUp 0.6s 0.75s both;
+        ">
+          <a href="#" onclick="document.getElementById('rented-overlay').style.display='none';return false;"
+             style="color:#c4714a; text-decoration:underline; text-underline-offset:3px;">
+            ดูรายละเอียดบ้าน →
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <style>
+      @keyframes fadeUp {
+        from { opacity:0; transform:translateY(22px); }
+        to   { opacity:1; transform:translateY(0); }
+      }
+      @keyframes popIn {
+        from { opacity:0; transform:scale(0.5); }
+        to   { opacity:1; transform:scale(1); }
+      }
+    </style>
     <!-- ===== LIGHTBOX ===== -->
     <div
       class="lightbox-overlay"
